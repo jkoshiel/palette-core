@@ -1,0 +1,159 @@
+# Catppuccin Frappe variant
+
+[meta]
+name = "Catppuccin Frappe"
+preset_id = "catppuccin_frappe"
+schema_version = "1"
+style = "frappe"
+kind = "preset-variant"
+inherits = "catppuccin"
+
+[base]
+background = "#303446"
+background_dark = "#292c3c"
+background_highlight = "#414559"
+foreground = "#c6d0f5"
+foreground_dark = "#b5bfe2"
+border = "#51576d"
+border_highlight = "#85c1dc"
+
+[semantic]
+success = "#a6d189"
+warning = "#e5c890"
+error = "#e78284"
+info = "#8caaee"
+hint = "#81c8be"
+
+[diff]
+added_bg = "#38474a"
+modified_bg = "#51576d"
+removed_bg = "#473842"
+text_bg = "#626880"
+
+added_fg = "#a6d189"
+modified_fg = "#ef9f76"
+removed_fg = "#e78284"
+ignored = "#737994"
+
+[git]
+add = "#a6d189"
+change = "#ef9f76"
+delete = "#e78284"
+ignore = "#737994"
+
+[surface]
+menu = "#292c3c"
+sidebar = "#292c3c"
+statusline = "#292c3c"
+float = "#292c3c"
+popup = "#292c3c"
+overlay = "#232634"
+highlight = "#414559"
+selection = "#51576d"
+search = "#85c1dc"
+
+[typography]
+comment = "#737994"
+gutter = "#51576d"
+line_number = "#b5bfe2"
+selection_text = "#c6d0f5"
+link = "#99d1db"
+title = "#babbf1"
+
+[syntax]
+keywords = "#ca9ee6"
+keywords_fn = "#ca9ee6"
+functions = "#8caaee"
+variables = "#c6d0f5"
+variables_builtin = "#e78284"
+parameters = "#ef9f76"
+
+properties = "#81c8be"
+types = "#e5c890"
+types_builtin = "#85c1dc"
+constants = "#ef9f76"
+
+numbers = "#ef9f76"
+booleans = "#ef9f76"
+strings = "#a6d189"
+strings_doc = "#e5c890"
+strings_escape = "#f4b8e4"
+strings_regex = "#99d1db"
+
+operators = "#99d1db"
+punctuation = "#949cbb"
+punctuation_bracket = "#b5bfe2"
+
+annotations = "#ea999c"
+attributes = "#e5c890"
+constructor = "#babbf1"
+tag = "#babbf1"
+tag_delimiter = "#949cbb"
+tag_attribute = "#81c8be"
+comments = "#737994"
+
+[editor]
+cursor = "#c6d0f5"
+cursor_text = "#303446"
+match_paren = "#ef9f76"
+selection_bg = "#51576d"
+selection_fg = "#c6d0f5"
+inlay_hint_bg = "#414559"
+inlay_hint_fg = "#838ba7"
+search_bg = "#85c1dc"
+search_fg = "#c6d0f5"
+
+[terminal]
+black = "#51576d"
+red = "#e78284"
+green = "#a6d189"
+yellow = "#e5c890"
+blue = "#8caaee"
+magenta = "#ca9ee6"
+cyan = "#99d1db"
+white = "#b5bfe2"
+bright_black = "#626880"
+bright_red = "#ea999c"
+bright_green = "#a6d189"
+bright_yellow = "#ef9f76"
+bright_blue = "#babbf1"
+bright_magenta = "#f4b8e4"
+bright_cyan = "#81c8be"
+bright_white = "#c6d0f5"
+
+[platform.terminal]
+background = "#292c3c"
+foreground = "#c6d0f5"
+
+[platform.web]
+background = "#303446"
+foreground = "#c6d0f5"
+
+[palette]
+rosewater = "#f2d5cf"
+flamingo = "#eebebe"
+pink = "#f4b8e4"
+mauve = "#ca9ee6"
+red = "#e78284"
+maroon = "#ea999c"
+peach = "#ef9f76"
+yellow = "#e5c890"
+green = "#a6d189"
+teal = "#81c8be"
+sky = "#99d1db"
+sapphire = "#85c1dc"
+blue = "#8caaee"
+lavender = "#babbf1"
+
+text = "#c6d0f5"
+subtext1 = "#b5bfe2"
+subtext0 = "#a5adce"
+overlay2 = "#949cbb"
+overlay1 = "#838ba7"
+overlay0 = "#737994"
+surface2 = "#626880"
+surface1 = "#51576d"
+surface0 = "#414559"
+base = "#303446"
+mantle = "#292c3c"
+crust = "#232634"

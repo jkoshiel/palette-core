@@ -1,0 +1,130 @@
+# TokyoNight Day variant
+
+[meta]
+name = "TokyoNight Day"
+preset_id = "tokyonight_day"
+schema_version = "1"
+style = "day"
+kind = "preset-variant"
+inherits = "tokyonight"
+
+[base]
+background = "#e1e2e7"
+background_dark = "#d0d5e3"
+background_highlight = "#c4c8da"
+foreground = "#3760bf"
+foreground_dark = "#6172b0"
+border = "#b4b5b9"
+border_highlight = "#4094a3"
+
+[semantic]
+success = "#387068"
+warning = "#8c6c3e"
+error = "#c64343"
+info = "#07879d"
+hint = "#118c74"
+
+[diff]
+added_bg = "#b7ced5"
+modified_bg = "#d5d9e4"
+removed_bg = "#dababe"
+text_bg = "#92a6d5"
+
+added_fg = "#4197a4"
+modified_fg = "#506d9c"
+removed_fg = "#c47981"
+ignored = "#8990b3"
+
+[git]
+add = "#4197a4"
+change = "#506d9c"
+delete = "#c47981"
+ignore = "#8990b3"
+
+[surface]
+menu = "#d0d5e3"
+sidebar = "#d0d5e3"
+statusline = "#d0d5e3"
+float = "#d0d5e3"
+popup = "#d0d5e3"
+overlay = "#d0d5e3"
+highlight = "#c4c8da"
+selection = "#b7c1e3"
+search = "#7890dd"
+
+[typography]
+comment = "#848cb5"
+gutter = "#a8aecb"
+line_number = "#a8aecb"
+selection_text = "#3760bf"
+link = "#118c74"
+title = "#2e7de9"
+
+[syntax]
+keywords = "#7847bd"
+keywords_fn = "#9854f1"
+functions = "#2e7de9"
+variables = "#3760bf"
+variables_builtin = "#f52a65"
+parameters = "#8c6c3e"
+
+properties = "#387068"
+types = "#188092"
+types_builtin = "#4094a3"
+constants = "#b15c00"
+
+numbers = "#8c6c3e"
+booleans = "#b15c00"
+strings = "#587539"
+strings_doc = "#8c6c3e"
+strings_escape = "#9854f1"
+strings_regex = "#2e5857"
+
+operators = "#006a83"
+punctuation = "#006a83"
+punctuation_bracket = "#6172b0"
+
+annotations = "#007197"
+attributes = "#007197"
+constructor = "#9854f1"
+tag = "#2e7de9"
+tag_delimiter = "#006a83"
+tag_attribute = "#387068"
+comments = "#848cb5"
+
+[editor]
+cursor = "#3760bf"
+cursor_text = "#e1e2e7"
+match_paren = "#b15c00"
+selection_bg = "#b7c1e3"
+selection_fg = "#3760bf"
+inlay_hint_bg = "#d9dce5"
+inlay_hint_fg = "#8990b3"
+search_bg = "#7890dd"
+search_fg = "#3760bf"
+
+[terminal]
+black = "#b4b5b9"
+red = "#f52a65"
+green = "#587539"
+yellow = "#8c6c3e"
+blue = "#2e7de9"
+magenta = "#9854f1"
+cyan = "#007197"
+white = "#6172b0"
+bright_black = "#a1a6c5"
+bright_red = "#ff4774"
+bright_green = "#5c8524"
+bright_yellow = "#a27629"
+bright_blue = "#358aff"
+bright_magenta = "#a463ff"
+bright_cyan = "#007ea8"
+bright_white = "#3760bf"
+
+[platform.terminal]
+background = "#d0d5e3"
+foreground = "#3760bf"
+
+[platform.web]
+background = "#e1e2e7"
+foreground = "#3760bf"

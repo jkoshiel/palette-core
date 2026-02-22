@@ -1,0 +1,130 @@
+# Catppuccin Latte variant
+
+[meta]
+name = "Catppuccin Latte"
+preset_id = "catppuccin_latte"
+schema_version = "1"
+style = "latte"
+kind = "preset-variant"
+inherits = "catppuccin"
+
+[base]
+background = "#eff1f5"
+background_dark = "#e6e9ef"
+background_highlight = "#ccd0da"
+foreground = "#4c4f69"
+foreground_dark = "#5c5f77"
+border = "#bcc0cc"
+border_highlight = "#209fb5"
+
+[semantic]
+success = "#40a02b"
+warning = "#df8e1d"
+error = "#d20f39"
+info = "#1e66f5"
+hint = "#179299"
+
+[diff]
+added_bg = "#d5ebd8"
+modified_bg = "#bcc0cc"
+removed_bg = "#ebd5d9"
+text_bg = "#acb0be"
+
+added_fg = "#40a02b"
+modified_fg = "#fe640b"
+removed_fg = "#d20f39"
+ignored = "#9ca0b0"
+
+[git]
+add = "#40a02b"
+change = "#fe640b"
+delete = "#d20f39"
+ignore = "#9ca0b0"
+
+[surface]
+menu = "#e6e9ef"
+sidebar = "#e6e9ef"
+statusline = "#e6e9ef"
+float = "#e6e9ef"
+popup = "#e6e9ef"
+overlay = "#dce0e8"
+highlight = "#ccd0da"
+selection = "#bcc0cc"
+search = "#209fb5"
+
+[typography]
+comment = "#8c8fa1"
+gutter = "#bcc0cc"
+line_number = "#5c5f77"
+selection_text = "#4c4f69"
+link = "#04a5e5"
+title = "#7287fd"
+
+[syntax]
+keywords = "#8839ef"
+keywords_fn = "#8839ef"
+functions = "#1e66f5"
+variables = "#4c4f69"
+variables_builtin = "#d20f39"
+parameters = "#fe640b"
+
+properties = "#179299"
+types = "#df8e1d"
+types_builtin = "#209fb5"
+constants = "#fe640b"
+
+numbers = "#fe640b"
+booleans = "#fe640b"
+strings = "#40a02b"
+strings_doc = "#df8e1d"
+strings_escape = "#ea76cb"
+strings_regex = "#04a5e5"
+
+operators = "#04a5e5"
+punctuation = "#7c7f93"
+punctuation_bracket = "#5c5f77"
+
+annotations = "#e64553"
+attributes = "#df8e1d"
+constructor = "#7287fd"
+tag = "#7287fd"
+tag_delimiter = "#7c7f93"
+tag_attribute = "#179299"
+comments = "#8c8fa1"
+
+[editor]
+cursor = "#4c4f69"
+cursor_text = "#eff1f5"
+match_paren = "#fe640b"
+selection_bg = "#bcc0cc"
+selection_fg = "#4c4f69"
+inlay_hint_bg = "#ccd0da"
+inlay_hint_fg = "#8c8fa1"
+search_bg = "#209fb5"
+search_fg = "#4c4f69"
+
+[terminal]
+black = "#4c4f69"
+red = "#d20f39"
+green = "#40a02b"
+yellow = "#df8e1d"
+blue = "#1e66f5"
+magenta = "#8839ef"
+cyan = "#179299"
+white = "#acb0be"
+bright_black = "#7c7f93"
+bright_red = "#e64553"
+bright_green = "#40a02b"
+bright_yellow = "#fe640b"
+bright_blue = "#7287fd"
+bright_magenta = "#ea76cb"
+bright_cyan = "#04a5e5"
+bright_white = "#bcc0cc"
+
+[platform.terminal]
+background = "#e6e9ef"
+foreground = "#4c4f69"
+
+[platform.web]
+background = "#eff1f5"
+foreground = "#4c4f69"

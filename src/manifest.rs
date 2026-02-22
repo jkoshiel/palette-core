@@ -1,0 +1,81 @@
+use std::collections::BTreeMap;
+use std::sync::Arc;
+
+use serde::Deserialize;
+
+use crate::error::PaletteError;
+
+pub type ManifestSection = BTreeMap<Arc<str>, Arc<str>>;
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct ManifestMeta {
+    pub name: Arc<str>,
+    pub preset_id: Arc<str>,
+    pub schema_version: Arc<str>,
+    pub style: Arc<str>,
+    pub kind: Arc<str>,
+    #[serde(default)]
+    pub inherits: Option<Arc<str>>,
+    #[serde(default)]
+    pub upstream_repo: Option<Arc<str>>,
+}
+
+#[derive(Debug, Clone)]
+pub struct PaletteManifest {
+    pub meta: Option<ManifestMeta>,
+    pub base: ManifestSection,
+    pub semantic: ManifestSection,
+    pub diff: ManifestSection,
+    pub surface: ManifestSection,
+    pub typography: ManifestSection,
+    pub syntax: ManifestSection,
+    pub editor: ManifestSection,
+    pub terminal: ManifestSection,
+}
+
+impl PaletteManifest {
+    pub fn from_toml(s: &str) -> Result<Self, PaletteError> {
+        let raw: RawManifest = toml::from_str(s)?;
+
+        match raw.base {
+            None => Err(PaletteError::MissingBase),
+            Some(base) => Ok(Self {
+                meta: raw.meta,
+                base,
+                semantic: raw.semantic,
+                diff: raw.diff,
+                surface: raw.surface,
+                typography: raw.typography,
+                syntax: raw.syntax,
+                editor: raw.editor,
+                terminal: raw.terminal,
+            }),
+        }
+    }
+
+    pub fn inherits_from(&self) -> Option<&str> {
+        self.meta.as_ref().and_then(|m| m.inherits.as_deref())
+    }
+}
+
+#[derive(Deserialize)]
+struct RawManifest {
+    #[serde(default)]
+    meta: Option<ManifestMeta>,
+    #[serde(default)]
+    base: Option<ManifestSection>,
+    #[serde(default)]
+    semantic: ManifestSection,
+    #[serde(default)]
+    diff: ManifestSection,
+    #[serde(default)]
+    surface: ManifestSection,
+    #[serde(default)]
+    typography: ManifestSection,
+    #[serde(default)]
+    syntax: ManifestSection,
+    #[serde(default)]
+    editor: ManifestSection,
+    #[serde(default)]
+    terminal: ManifestSection,
+}

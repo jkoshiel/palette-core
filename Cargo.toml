@@ -1,0 +1,29 @@
+[package]
+name = "palette-core"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "TOML-defined theme system with inheritance, CSS export, and multi-target rendering"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/jkoshiel/palette-core"
+readme = "README.md"
+keywords = ["theme", "palette", "color", "toml", "egui"]
+categories = ["gui", "config", "rendering"]
+exclude = ["docs/", "scripts/", ".claude/"]
+
+[dependencies]
+serde = { version = "1", features = ["derive", "rc"] }
+toml = "1"
+thiserror = "2"
+ratatui = { version = "0.30", optional = true }
+egui = { version = "0.33", optional = true, default-features = false }
+serde_json = { version = "1", optional = true }
+
+[features]
+default = []
+terminal = ["dep:ratatui"]
+egui = ["dep:egui"]
+editor = []
+snapshot = ["dep:serde_json"]
+platform = []
+full = ["terminal", "egui", "editor", "snapshot", "platform"]

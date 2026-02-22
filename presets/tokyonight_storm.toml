@@ -1,0 +1,47 @@
+# TokyoNight Storm variant
+
+[meta]
+name = "TokyoNight Storm"
+preset_id = "tokyonight_storm"
+schema_version = "1"
+style = "storm"
+kind = "preset-variant"
+inherits = "tokyonight"
+
+[base]
+background = "#24283b"
+background_dark = "#1f2335"
+border = "#1d202f"
+border_highlight = "#29a4bd"
+
+[diff]
+added_bg = "#2b485a"
+modified_bg = "#272d43"
+removed_bg = "#52313f"
+
+[surface]
+menu = "#1f2335"
+sidebar = "#1f2335"
+statusline = "#1f2335"
+float = "#1f2335"
+popup = "#1f2335"
+overlay = "#1f2335"
+selection = "#2e3c64"
+
+[syntax]
+types_builtin = "#29a4bd"
+comments = "#565f89"
+
+[editor]
+cursor_text = "#24283b"
+selection_bg = "#2e3c64"
+inlay_hint_bg = "#262c40"
+
+[terminal]
+black = "#1d202f"
+
+[platform.terminal]
+background = "#1f2335"
+
+[platform.web]
+background = "#24283b"

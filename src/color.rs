@@ -1,0 +1,35 @@
+use std::sync::Arc;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct InvalidHex {
+    pub value: Arc<str>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Color {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+}
+
+impl Color {
+    pub fn from_hex(hex: &str) -> Result<Self, InvalidHex> {
+        let digits = match hex.strip_prefix('#') {
+            Some(d) if d.len() == 6 => d,
+            _ => return Err(InvalidHex { value: Arc::from(hex) }),
+        };
+
+        let r = u8::from_str_radix(&digits[0..2], 16);
+        let g = u8::from_str_radix(&digits[2..4], 16);
+        let b = u8::from_str_radix(&digits[4..6], 16);
+
+        match (r, g, b) {
+            (Ok(r), Ok(g), Ok(b)) => Ok(Self { r, g, b }),
+            _ => Err(InvalidHex { value: Arc::from(hex) }),
+        }
+    }
+
+    pub fn to_hex(&self) -> String {
+        format!("#{:02X}{:02X}{:02X}", self.r, self.g, self.b)
+    }
+}

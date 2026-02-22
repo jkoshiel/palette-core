@@ -1,0 +1,67 @@
+# GitHub Light variant
+
+[meta]
+name = "GitHub Light"
+preset_id = "github_light"
+schema_version = "1"
+style = "light"
+kind = "preset-variant"
+inherits = "github_dark"
+
+[base]
+background = "#F6F8FA"
+background_dark = "#EDEFF2"
+background_highlight = "#EDEFF2"
+foreground = "#24292F"
+foreground_dark = "#4E5A67"
+border = "#D0D7DE"
+border_highlight = "#54AEFF"
+
+[semantic]
+success = "#1A7F37"
+warning = "#D4A72C"
+error = "#CF222E"
+info = "#0969DA"
+hint = "#57606A"
+
+[diff]
+added_bg = "#d4f0d8"
+removed_bg = "#f0d4d8"
+
+added_fg = "#2EA043"
+modified_fg = "#BF8700"
+removed_fg = "#CF222E"
+ignored = "#57606A"
+
+[git]
+add = "#2EA043"
+change = "#BF8700"
+delete = "#CF222E"
+ignore = "#57606A"
+
+[surface]
+menu = "#EDEFF2"
+sidebar = "#EDEFF2"
+statusline = "#EDEFF2"
+float = "#EDEFF2"
+popup = "#EDEFF2"
+overlay = "#D8DEE2"
+selection = "#B6E3FF"
+search = "#54AEFF"
+
+[typography]
+comment = "#57606A"
+gutter = "#8C959F"
+line_number = "#4E5A67"
+selection_text = "#24292F"
+
+[syntax]
+comments = "#57606A"
+
+[platform.terminal]
+background = "#EDEFF2"
+foreground = "#24292F"
+
+[platform.web]
+background = "#F6F8FA"
+foreground = "#24292F"

@@ -1,0 +1,164 @@
+# GitHub Dark base preset
+
+[meta]
+name = "GitHub Dark"
+preset_id = "github_dark"
+schema_version = "1"
+style = "dark"
+kind = "preset-base"
+
+[base]
+background = "#0D1117"
+background_dark = "#161B22"
+background_highlight = "#161B22"
+foreground = "#C9D1D9"
+foreground_dark = "#7D8590"
+border = "#30363D"
+border_highlight = "#1F6FEB"
+
+[semantic]
+success = "#2EA043"
+warning = "#D29922"
+error = "#F85149"
+info = "#58A6FF"
+hint = "#8B949E"
+
+[diff]
+added_bg = "#162d1e"
+modified_bg = "#B08800"
+removed_bg = "#2d161c"
+text_bg = "#244361"
+
+added_fg = "#196C2E"
+modified_fg = "#B08800"
+removed_fg = "#A40E26"
+ignored = "#8B949E"
+
+[git]
+add = "#196C2E"
+change = "#B08800"
+delete = "#A40E26"
+ignore = "#8B949E"
+
+[surface]
+menu = "#161B22"
+sidebar = "#161B22"
+statusline = "#161B22"
+float = "#161B22"
+popup = "#161B22"
+overlay = "#0B1016"
+highlight = "#30363D"
+selection = "#244361"
+search = "#1F6FEB"
+
+[typography]
+comment = "#8B949E"
+gutter = "#6E7681"
+line_number = "#7D8590"
+selection_text = "#F0F6FC"
+link = "#58A6FF"
+title = "#C9D1D9"
+
+[syntax]
+keywords = "#D29922"
+keywords_fn = "#58A6FF"
+functions = "#58A6FF"
+variables = "#C9D1D9"
+variables_builtin = "#F85149"
+parameters = "#F0F6FC"
+
+properties = "#2EA043"
+types = "#58A6FF"
+types_builtin = "#1F6FEB"
+constants = "#D29922"
+
+numbers = "#D29922"
+booleans = "#D29922"
+strings = "#2EA043"
+strings_doc = "#6E7681"
+strings_escape = "#58A6FF"
+strings_regex = "#1F6FEB"
+
+operators = "#58A6FF"
+punctuation = "#6E7681"
+punctuation_bracket = "#7D8590"
+
+annotations = "#8B949E"
+attributes = "#D29922"
+constructor = "#58A6FF"
+tag = "#58A6FF"
+tag_delimiter = "#6E7681"
+tag_attribute = "#2EA043"
+comments = "#8B949E"
+
+[editor]
+cursor = "#C9D1D9"
+cursor_text = "#0D1117"
+match_paren = "#1F6FEB"
+selection_bg = "#244361"
+selection_fg = "#F0F6FC"
+inlay_hint_bg = "#0B1016"
+inlay_hint_fg = "#8B949E"
+search_bg = "#1F6FEB"
+search_fg = "#C9D1D9"
+
+diagnostic_error = "#F85149"
+diagnostic_warn = "#D29922"
+diagnostic_info = "#58A6FF"
+diagnostic_hint = "#8B949E"
+diagnostic_underline_error = "#F85149"
+diagnostic_underline_warn = "#D29922"
+diagnostic_underline_info = "#58A6FF"
+diagnostic_underline_hint = "#8B949E"
+
+[terminal]
+black = "#0D1117"
+red = "#F85149"
+green = "#2EA043"
+yellow = "#D29922"
+blue = "#58A6FF"
+magenta = "#1F6FEB"
+cyan = "#244361"
+white = "#C9D1D9"
+bright_black = "#30363D"
+bright_red = "#F85149"
+bright_green = "#2EA043"
+bright_yellow = "#B08800"
+bright_blue = "#1F6FEB"
+bright_magenta = "#58A6FF"
+bright_cyan = "#244361"
+bright_white = "#F0F6FC"
+
+[platform.terminal]
+background = "#161B22"
+foreground = "#C9D1D9"
+
+[platform.web]
+background = "#0D1117"
+foreground = "#C9D1D9"
+
+[palette]
+background = "#0D1117"
+background_dark = "#161B22"
+background_highlight = "#161B22"
+foreground = "#C9D1D9"
+foreground_dark = "#7D8590"
+border = "#30363D"
+focus = "#1F6FEB"
+selection = "#244361"
+overlay = "#0B1016"
+
+comment = "#8B949E"
+gutter = "#6E7681"
+line_number = "#7D8590"
+selection_text = "#F0F6FC"
+
+success = "#2EA043"
+warning = "#D29922"
+error = "#F85149"
+info = "#58A6FF"
+hint = "#8B949E"
+
+diff_added = "#196C2E"
+diff_modified = "#B08800"
+diff_removed = "#A40E26"
