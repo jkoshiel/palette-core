@@ -27,3 +27,6 @@ editor = []
 snapshot = ["dep:serde_json"]
 platform = []
 full = ["terminal", "egui", "editor", "snapshot", "platform"]
+
+[package.metadata.docs.rs]
+all-features = true
