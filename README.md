@@ -25,6 +25,19 @@ let theme = to_terminal_theme(&palette);
 // theme.base["background"], theme.semantic["error"], etc.
 ```
 
+### WCAG contrast validation
+
+```rust
+use palette_core::registry::load_preset;
+use palette_core::contrast::{validate_palette, ContrastLevel};
+
+let palette = load_preset("tokyonight")?;
+let violations = validate_palette(&palette, ContrastLevel::AaNormal);
+for v in &violations {
+    println!("{} on {}: {:.2}:1", v.foreground_label, v.background_label, v.ratio);
+}
+```
+
 ### egui
 
 ```rust
@@ -45,7 +58,7 @@ ctx.set_visuals(to_egui_visuals(&palette));
 | `platform` | — | Parse `[platform.terminal]` / `[platform.web]` overrides |
 | `full` | all of the above | Everything |
 
-Core functionality (parsing, merge, CSS export) has no optional dependencies.
+Core functionality (parsing, merge, CSS export, WCAG contrast checking) has no optional dependencies.
 
 ## Bundled presets
 
