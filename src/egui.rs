@@ -5,38 +5,35 @@ pub fn to_color32(color: &Color) -> ::egui::Color32 {
     ::egui::Color32::from_rgb(color.r, color.g, color.b)
 }
 
+macro_rules! apply_color {
+    ($field:expr => $($target:expr),+) => {
+        match $field {
+            Some(c) => {
+                let color = to_color32(c);
+                $($target = color;)+
+            }
+            None => {}
+        }
+    };
+}
+
 pub fn to_egui_visuals(palette: &Palette) -> ::egui::Visuals {
     let mut v = ::egui::Visuals::dark();
 
-    if let Some(bg) = &palette.base.background {
-        let c = to_color32(bg);
-        v.panel_fill = c;
-        v.window_fill = c;
-        v.faint_bg_color = c;
-        v.extreme_bg_color = c;
-    }
+    apply_color!(&palette.base.background =>
+        v.panel_fill, v.window_fill, v.faint_bg_color, v.extreme_bg_color);
+
     if let Some(fg) = &palette.base.foreground {
         v.override_text_color = Some(to_color32(fg));
     }
 
-    if let Some(err) = &palette.semantic.error {
-        v.error_fg_color = to_color32(err);
-    }
-    if let Some(warn) = &palette.semantic.warning {
-        v.warn_fg_color = to_color32(warn);
-    }
-    if let Some(info) = &palette.semantic.info {
-        v.hyperlink_color = to_color32(info);
-    }
+    apply_color!(&palette.semantic.error => v.error_fg_color);
+    apply_color!(&palette.semantic.warning => v.warn_fg_color);
+    apply_color!(&palette.semantic.info => v.hyperlink_color);
 
-    if let Some(sel) = &palette.surface.selection {
-        v.selection.bg_fill = to_color32(sel);
-    }
-    if let Some(hl) = &palette.surface.highlight {
-        let c = to_color32(hl);
-        v.widgets.hovered.bg_fill = c;
-        v.widgets.active.bg_fill = c;
-    }
+    apply_color!(&palette.surface.selection => v.selection.bg_fill);
+    apply_color!(&palette.surface.highlight =>
+        v.widgets.hovered.bg_fill, v.widgets.active.bg_fill);
 
     v
 }

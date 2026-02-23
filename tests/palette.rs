@@ -6,15 +6,11 @@ use palette_core::manifest::PaletteManifest;
 use palette_core::merge::merge_manifests;
 use palette_core::palette::Palette;
 
-fn load_preset(name: &str) -> PaletteManifest {
-    let path = format!("presets/{name}.toml");
-    let content = std::fs::read_to_string(&path).unwrap();
-    PaletteManifest::from_toml(&content).unwrap()
-}
+mod common;
 
 #[test]
 fn full_base_resolves_all_colors() {
-    let manifest = load_preset("tokyonight");
+    let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
 
     assert!(palette.base.background.is_some());
@@ -28,8 +24,8 @@ fn full_base_resolves_all_colors() {
 
 #[test]
 fn merged_variant_inherits() {
-    let base = load_preset("tokyonight");
-    let storm = load_preset("tokyonight_storm");
+    let base = common::load_preset("tokyonight");
+    let storm = common::load_preset("tokyonight_storm");
     let merged = merge_manifests(&storm, &base);
     let palette = Palette::from_manifest(&merged).unwrap();
 
@@ -83,7 +79,7 @@ background = "not-a-color"
 
 #[test]
 fn meta_propagates() {
-    let manifest = load_preset("tokyonight");
+    let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
     let meta = palette.meta.unwrap();
 
@@ -94,17 +90,9 @@ fn meta_propagates() {
 
 #[test]
 fn no_meta_yields_none() {
-    let manifest = PaletteManifest {
-        meta: None,
-        base: BTreeMap::from([(Arc::from("background"), Arc::from("#000000"))]),
-        semantic: BTreeMap::new(),
-        diff: BTreeMap::new(),
-        surface: BTreeMap::new(),
-        typography: BTreeMap::new(),
-        syntax: BTreeMap::new(),
-        editor: BTreeMap::new(),
-        terminal: BTreeMap::new(),
-    };
+    let manifest = common::manifest_with_base(
+        BTreeMap::from([(Arc::from("background"), Arc::from("#000000"))]),
+    );
     let palette = Palette::from_manifest(&manifest).unwrap();
     assert!(palette.meta.is_none());
 }

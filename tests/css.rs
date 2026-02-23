@@ -2,18 +2,13 @@ use std::collections::BTreeMap;
 use std::sync::Arc;
 
 use palette_core::css::to_css_custom_properties;
-use palette_core::manifest::PaletteManifest;
 use palette_core::palette::Palette;
 
-fn load_preset(name: &str) -> PaletteManifest {
-    let path = format!("presets/{name}.toml");
-    let content = std::fs::read_to_string(&path).unwrap();
-    PaletteManifest::from_toml(&content).unwrap()
-}
+mod common;
 
 #[test]
 fn contains_expected_variable_format() {
-    let manifest = load_preset("tokyonight");
+    let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
     let css = to_css_custom_properties(&palette, "mx");
 
@@ -25,7 +20,7 @@ fn contains_expected_variable_format() {
 
 #[test]
 fn all_populated_slots_present() {
-    let manifest = load_preset("tokyonight");
+    let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
     let css = to_css_custom_properties(&palette, "mx");
 
@@ -44,17 +39,9 @@ fn all_populated_slots_present() {
 
 #[test]
 fn none_slots_absent() {
-    let manifest = PaletteManifest {
-        meta: None,
-        base: BTreeMap::from([(Arc::from("background"), Arc::from("#000000"))]),
-        semantic: BTreeMap::new(),
-        diff: BTreeMap::new(),
-        surface: BTreeMap::new(),
-        typography: BTreeMap::new(),
-        syntax: BTreeMap::new(),
-        editor: BTreeMap::new(),
-        terminal: BTreeMap::new(),
-    };
+    let manifest = common::manifest_with_base(
+        BTreeMap::from([(Arc::from("background"), Arc::from("#000000"))]),
+    );
     let palette = Palette::from_manifest(&manifest).unwrap();
     let css = to_css_custom_properties(&palette, "mx");
 
@@ -66,17 +53,9 @@ fn none_slots_absent() {
 
 #[test]
 fn underscore_to_hyphen_conversion() {
-    let manifest = PaletteManifest {
-        meta: None,
-        base: BTreeMap::from([(Arc::from("background_dark"), Arc::from("#111111"))]),
-        semantic: BTreeMap::new(),
-        diff: BTreeMap::new(),
-        surface: BTreeMap::new(),
-        typography: BTreeMap::new(),
-        syntax: BTreeMap::new(),
-        editor: BTreeMap::new(),
-        terminal: BTreeMap::new(),
-    };
+    let manifest = common::manifest_with_base(
+        BTreeMap::from([(Arc::from("background_dark"), Arc::from("#111111"))]),
+    );
     let palette = Palette::from_manifest(&manifest).unwrap();
     let css = to_css_custom_properties(&palette, "mx");
 

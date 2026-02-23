@@ -6,15 +6,10 @@ use std::sync::Arc;
 use ratatui::style::Color as RatatuiColor;
 
 use palette_core::color::Color;
-use palette_core::manifest::PaletteManifest;
 use palette_core::palette::Palette;
 use palette_core::terminal::{to_ratatui_color, to_terminal_theme};
 
-fn load_preset(name: &str) -> PaletteManifest {
-    let path = format!("presets/{name}.toml");
-    let content = std::fs::read_to_string(&path).unwrap();
-    PaletteManifest::from_toml(&content).unwrap()
-}
+mod common;
 
 #[test]
 fn single_color_converts_rgb() {
@@ -24,7 +19,7 @@ fn single_color_converts_rgb() {
 
 #[test]
 fn all_populated_slots_present() {
-    let manifest = load_preset("tokyonight");
+    let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
     let theme = to_terminal_theme(&palette);
 
@@ -51,7 +46,7 @@ fn all_populated_slots_present() {
 
 #[test]
 fn rgb_values_match_source() {
-    let manifest = load_preset("tokyonight");
+    let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
     let theme = to_terminal_theme(&palette);
 
@@ -63,17 +58,9 @@ fn rgb_values_match_source() {
 
 #[test]
 fn empty_sections_produce_empty_maps() {
-    let manifest = PaletteManifest {
-        meta: None,
-        base: BTreeMap::from([(Arc::from("background"), Arc::from("#000000"))]),
-        semantic: BTreeMap::new(),
-        diff: BTreeMap::new(),
-        surface: BTreeMap::new(),
-        typography: BTreeMap::new(),
-        syntax: BTreeMap::new(),
-        editor: BTreeMap::new(),
-        terminal: BTreeMap::new(),
-    };
+    let manifest = common::manifest_with_base(
+        BTreeMap::from([(Arc::from("background"), Arc::from("#000000"))]),
+    );
     let palette = Palette::from_manifest(&manifest).unwrap();
     let theme = to_terminal_theme(&palette);
 
@@ -89,7 +76,7 @@ fn empty_sections_produce_empty_maps() {
 
 #[test]
 fn terminal_ansi_maps_all_16_colors() {
-    let manifest = load_preset("tokyonight");
+    let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
     let theme = to_terminal_theme(&palette);
 

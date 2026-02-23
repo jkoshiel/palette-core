@@ -4,17 +4,12 @@ use egui::Color32;
 
 use palette_core::color::Color;
 use palette_core::egui::{to_color32, to_egui_visuals};
-use palette_core::manifest::PaletteManifest;
 use palette_core::palette::Palette;
 
-fn load_preset(name: &str) -> PaletteManifest {
-    let path = format!("presets/{name}.toml");
-    let content = std::fs::read_to_string(&path).unwrap();
-    PaletteManifest::from_toml(&content).unwrap()
-}
+mod common;
 
 fn tokyonight_visuals() -> ::egui::Visuals {
-    let manifest = load_preset("tokyonight");
+    let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
     to_egui_visuals(&palette)
 }

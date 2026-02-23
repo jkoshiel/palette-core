@@ -11,7 +11,12 @@ fn write_section<'a>(
 ) {
     for (slot, color) in slots {
         let slot_css = slot.replace('_', "-");
-        let _ = writeln!(out, "  --{prefix}-{section}-{slot_css}: {};", color.to_hex());
+        // String::write_fmt is infallible
+        let _ = writeln!(
+            out,
+            "  --{prefix}-{section}-{slot_css}: #{:02x}{:02x}{:02x};",
+            color.r, color.g, color.b
+        );
     }
 }
 
