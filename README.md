@@ -50,9 +50,19 @@ Core functionality (parsing, merge, CSS export) has no optional dependencies.
 
 | Family | Presets |
 |--------|--------|
-| TokyoNight | `tokyonight`, `tokyonight_storm`, `tokyonight_day`, `tokyonight_moon` |
+| Ayu | `ayu_dark`, `ayu_light`, `ayu_mirage` |
 | Catppuccin | `catppuccin`, `catppuccin_frappe`, `catppuccin_latte`, `catppuccin_macchiato` |
+| Dracula | `dracula` |
+| Everforest | `everforest_dark`, `everforest_light` |
 | GitHub | `github_dark`, `github_light` |
+| Gruvbox | `gruvbox_dark`, `gruvbox_light` |
+| Kanagawa | `kanagawa` |
+| Monokai | `monokai` |
+| Nord | `nord` |
+| One | `one_dark`, `one_light` |
+| Rosé Pine | `rose_pine`, `rose_pine_dawn`, `rose_pine_moon` |
+| Solarized | `solarized_dark`, `solarized_light` |
+| TokyoNight | `tokyonight`, `tokyonight_storm`, `tokyonight_day`, `tokyonight_moon` |
 
 All presets are embedded at compile time via `include_str!`. Use `registry::preset_ids()` to list them.
 
