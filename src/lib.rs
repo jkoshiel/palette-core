@@ -9,6 +9,7 @@ pub mod registry;
 
 pub mod contrast;
 pub mod css;
+pub mod manipulation;
 
 #[cfg(feature = "terminal")]
 pub mod terminal;

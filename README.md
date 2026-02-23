@@ -38,6 +38,45 @@ for v in &violations {
 }
 ```
 
+### Color manipulation
+
+```rust
+use palette_core::color::Color;
+use palette_core::manipulation::blend;
+
+let base = Color::from_hex("#1a1b26")?;
+
+let hover = base.lighten(0.1);
+let disabled = base.desaturate(0.3);
+let accent = base.rotate_hue(180.0);
+
+let overlay = blend(Color::from_hex("#FF0000")?, base, 0.5);
+```
+
+Available methods: `lighten`, `darken`, `saturate`, `desaturate`, `rotate_hue`. All take absolute amounts (CSS model). Non-finite inputs return the color unchanged.
+
+### Snapshot (JSON export)
+
+```rust
+use palette_core::registry::load_preset;
+use palette_core::snapshot::{to_json, to_json_value};
+
+let palette = load_preset("nord")?;
+let json = to_json(&palette)?;
+let value = to_json_value(&palette)?; // serde_json::Value
+```
+
+### Platform overrides
+
+```rust
+use palette_core::registry::load_preset;
+use palette_core::platform::from_sections;
+
+let manifest = palette_core::manifest::PaletteManifest::from_toml(toml_str)?;
+let overrides = from_sections(&manifest.platform)?;
+// overrides["terminal"].background, overrides["web"].foreground, etc.
+```
+
 ### egui
 
 ```rust
@@ -58,7 +97,7 @@ ctx.set_visuals(to_egui_visuals(&palette));
 | `platform` | — | Parse `[platform.terminal]` / `[platform.web]` overrides |
 | `full` | all of the above | Everything |
 
-Core functionality (parsing, merge, CSS export, WCAG contrast checking) has no optional dependencies.
+Core functionality (parsing, merge, CSS export, WCAG contrast checking, color manipulation) has no optional dependencies.
 
 ## Bundled presets
 
