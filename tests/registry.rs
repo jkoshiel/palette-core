@@ -1,6 +1,8 @@
+use std::io::Write;
+
 use palette_core::color::Color;
 use palette_core::error::PaletteError;
-use palette_core::registry::{load_preset, preset_ids};
+use palette_core::registry::{load_preset, load_preset_file, preset_ids};
 
 #[test]
 fn all_presets_load_with_background() {
@@ -38,4 +40,148 @@ fn unknown_preset_returns_error() {
 #[test]
 fn preset_ids_list_is_complete() {
     assert_eq!(preset_ids().len(), 28);
+}
+
+const MINIMAL_TOML: &str = r##"
+[meta]
+name = "Test Theme"
+preset_id = "test_theme"
+schema_version = "1"
+style = "dark"
+kind = "preset-base"
+
+[base]
+background = "#1a1b2a"
+foreground = "#c0caf5"
+"##;
+
+const BASE_TOML: &str = r##"
+[meta]
+name = "Sibling Base"
+preset_id = "sibling_base"
+schema_version = "1"
+style = "dark"
+kind = "preset-base"
+
+[base]
+background = "#111111"
+foreground = "#eeeeee"
+
+[semantic]
+success = "#00ff00"
+"##;
+
+const VARIANT_SIBLING_TOML: &str = r##"
+[meta]
+name = "Sibling Variant"
+preset_id = "sibling_variant"
+schema_version = "1"
+style = "dark"
+kind = "preset-variant"
+inherits = "sibling_base"
+
+[base]
+background = "#222222"
+"##;
+
+const VARIANT_EMBEDDED_TOML: &str = r##"
+[meta]
+name = "Embedded Variant"
+preset_id = "embedded_variant"
+schema_version = "1"
+style = "night"
+kind = "preset-variant"
+inherits = "tokyonight"
+
+[base]
+background = "#333333"
+"##;
+
+const VARIANT_MISSING_PARENT_TOML: &str = r##"
+[meta]
+name = "Orphan Variant"
+preset_id = "orphan"
+schema_version = "1"
+style = "dark"
+kind = "preset-variant"
+inherits = "no_such_preset"
+
+[base]
+background = "#000000"
+"##;
+
+fn write_temp_file(dir: &tempfile::TempDir, name: &str, content: &str) -> std::path::PathBuf {
+    let path = dir.path().join(name);
+    let mut f = std::fs::File::create(&path).unwrap();
+    f.write_all(content.as_bytes()).unwrap();
+    path
+}
+
+#[test]
+fn file_preset_loads_from_disk() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = write_temp_file(&dir, "test_theme.toml", MINIMAL_TOML);
+
+    let palette = load_preset_file(&path).unwrap();
+    assert_eq!(
+        palette.base.background,
+        Some(Color::from_hex("#1a1b2a").unwrap()),
+    );
+}
+
+#[test]
+fn file_preset_inherits_from_sibling() {
+    let dir = tempfile::tempdir().unwrap();
+    write_temp_file(&dir, "sibling_base.toml", BASE_TOML);
+    let variant_path = write_temp_file(&dir, "sibling_variant.toml", VARIANT_SIBLING_TOML);
+
+    let palette = load_preset_file(&variant_path).unwrap();
+    assert_eq!(
+        palette.base.background,
+        Some(Color::from_hex("#222222").unwrap()),
+        "variant overrides base background"
+    );
+    assert_eq!(
+        palette.base.foreground,
+        Some(Color::from_hex("#eeeeee").unwrap()),
+        "variant inherits foreground from sibling base"
+    );
+    assert_eq!(
+        palette.semantic.success,
+        Some(Color::from_hex("#00ff00").unwrap()),
+        "variant inherits semantic.success from sibling base"
+    );
+}
+
+#[test]
+fn file_preset_inherits_from_embedded() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = write_temp_file(&dir, "embedded_variant.toml", VARIANT_EMBEDDED_TOML);
+
+    let palette = load_preset_file(&path).unwrap();
+    assert_eq!(
+        palette.base.background,
+        Some(Color::from_hex("#333333").unwrap()),
+        "variant uses its own background"
+    );
+    assert_eq!(
+        palette.semantic.success,
+        Some(Color::from_hex("#73daca").unwrap()),
+        "variant inherits success from embedded tokyonight"
+    );
+}
+
+#[test]
+fn file_preset_missing_file_returns_error() {
+    let result = load_preset_file(std::path::Path::new("/tmp/does_not_exist.toml"));
+    assert!(matches!(result, Err(PaletteError::Io { .. })));
+}
+
+#[test]
+fn file_preset_missing_parent_returns_error() {
+    let dir = tempfile::tempdir().unwrap();
+    let path = write_temp_file(&dir, "orphan.toml", VARIANT_MISSING_PARENT_TOML);
+
+    let result = load_preset_file(&path);
+    assert!(matches!(result, Err(PaletteError::UnknownPreset(_))));
 }

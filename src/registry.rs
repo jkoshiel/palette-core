@@ -1,3 +1,4 @@
+use std::path::Path;
 use std::sync::Arc;
 
 use crate::error::PaletteError;
@@ -7,7 +8,7 @@ use crate::palette::Palette;
 
 macro_rules! presets {
     ($($id:literal => $file:literal),+ $(,)?) => {
-        fn preset_toml(id: &str) -> Option<&'static str> {
+        pub(crate) fn preset_toml(id: &str) -> Option<&'static str> {
             match id {
                 $($id => Some(include_str!($file)),)+
                 _ => None,
@@ -49,6 +50,45 @@ presets! {
     "tokyonight_day"        => "../presets/tokyonight_day.toml",
     "tokyonight_moon"       => "../presets/tokyonight_moon.toml",
     "tokyonight_storm"      => "../presets/tokyonight_storm.toml",
+}
+
+pub fn load_preset_file(path: &Path) -> Result<Palette, PaletteError> {
+    let path_str: Arc<str> = Arc::from(path.to_string_lossy().as_ref());
+    let toml = std::fs::read_to_string(path).map_err(|source| PaletteError::Io {
+        path: Arc::clone(&path_str),
+        source,
+    })?;
+    let manifest = PaletteManifest::from_toml(&toml)?;
+
+    let resolved = match manifest.inherits_from() {
+        None => manifest,
+        Some(parent_id) => {
+            let parent = resolve_parent(path, parent_id)?;
+            merge_manifests(&manifest, &parent)
+        }
+    };
+
+    Palette::from_manifest(&resolved)
+}
+
+fn resolve_parent(child_path: &Path, parent_id: &str) -> Result<PaletteManifest, PaletteError> {
+    let sibling = child_path
+        .parent()
+        .map(|dir| dir.join(format!("{parent_id}.toml")))
+        .filter(|p| p.is_file());
+
+    match (sibling, preset_toml(parent_id)) {
+        (Some(path), _) => {
+            let path_str: Arc<str> = Arc::from(path.to_string_lossy().as_ref());
+            let toml = std::fs::read_to_string(&path).map_err(|source| PaletteError::Io {
+                path: path_str,
+                source,
+            })?;
+            PaletteManifest::from_toml(&toml)
+        }
+        (None, Some(embedded)) => PaletteManifest::from_toml(embedded),
+        (None, None) => Err(PaletteError::UnknownPreset(Arc::from(parent_id))),
+    }
 }
 
 pub fn load_preset(id: &str) -> Result<Palette, PaletteError> {
