@@ -8,11 +8,37 @@ Themes are authored as TOML presets. Variants inherit from a base and override o
 
 ```rust
 use palette_core::registry::load_preset;
-use palette_core::css::to_css_custom_properties;
 
 let palette = load_preset("tokyonight_storm")?;
-let css = to_css_custom_properties(&palette, "app");
 ```
+
+### CSS custom properties
+
+```rust
+use palette_core::css::to_css_custom_properties;
+
+let props = to_css_custom_properties(&palette, "app");
+let css = format!(":root {{\n{props}}}");
+```
+
+This produces a stylesheet you can write to a file or inject as a `<style>` element:
+
+```css
+:root {
+  --app-base-background: #1a1b26;
+  --app-base-foreground: #c0caf5;
+  --app-semantic-error: #db4b4b;
+  /* ... */
+}
+```
+
+Then reference the variables in your components:
+
+```css
+body { background: var(--app-base-background); color: var(--app-base-foreground); }
+```
+
+The `prefix` argument namespaces every variable, so multiple themes can coexist.
 
 ### Terminal (ratatui)
 
