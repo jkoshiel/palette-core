@@ -14,13 +14,19 @@ impl fmt::Display for InvalidHex {
 
 impl std::error::Error for InvalidHex {}
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "snapshot", derive(serde::Serialize))]
 #[cfg_attr(feature = "snapshot", serde(into = "String"))]
 pub struct Color {
     pub r: u8,
     pub g: u8,
     pub b: u8,
+}
+
+impl fmt::Display for Color {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "#{:02X}{:02X}{:02X}", self.r, self.g, self.b)
+    }
 }
 
 impl Color {
@@ -41,7 +47,7 @@ impl Color {
     }
 
     pub fn to_hex(&self) -> String {
-        format!("#{:02X}{:02X}{:02X}", self.r, self.g, self.b)
+        self.to_string()
     }
 
     /// WCAG 2.1 relative luminance. Returns a value in `[0.0, 1.0]`.
@@ -59,6 +65,6 @@ impl Color {
 
 impl From<Color> for String {
     fn from(color: Color) -> Self {
-        color.to_hex()
+        color.to_string()
     }
 }

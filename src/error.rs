@@ -14,6 +14,9 @@ pub enum PaletteError {
     #[error("manifest missing required [base] section")]
     MissingBase,
 
+    #[error("manifest missing required [meta] section")]
+    MissingMeta,
+
     #[error("invalid hex `{value}` in [{section}].{field}")]
     InvalidHex {
         section: Arc<str>,

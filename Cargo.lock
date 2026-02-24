@@ -806,12 +806,15 @@ name = "palette-core"
 version = "0.3.6"
 dependencies = [
  "egui",
+ "js-sys",
+ "paste",
  "ratatui",
  "serde",
  "serde_json",
  "tempfile",
  "thiserror 2.0.18",
  "toml",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -836,6 +839,12 @@ dependencies = [
  "smallvec",
  "windows-link",
 ]
+
+[[package]]
+name = "paste"
+version = "1.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "pest"

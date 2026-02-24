@@ -1,3 +1,5 @@
+use std::fmt::Write;
+
 use palette_core::color::{Color, InvalidHex};
 
 #[test]
@@ -71,4 +73,18 @@ fn roundtrip() {
 #[test]
 fn from_hex_non_ascii_returns_error() {
     assert!(Color::from_hex("#café00").is_err());
+}
+
+#[test]
+fn display_matches_to_hex() {
+    let color = Color { r: 26, g: 27, b: 42 };
+    assert_eq!(format!("{color}"), color.to_hex());
+}
+
+#[test]
+fn display_in_format_string() {
+    let color = Color { r: 255, g: 0, b: 128 };
+    let mut buf = String::new();
+    write!(buf, "color: {color}").unwrap();
+    assert_eq!(buf, "color: #FF0080");
 }

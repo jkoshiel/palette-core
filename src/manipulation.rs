@@ -125,6 +125,12 @@ impl Color {
     }
 }
 
+impl Color {
+    pub fn blend(self, bg: Color, alpha: f64) -> Color {
+        blend(self, bg, alpha)
+    }
+}
+
 /// Alpha-composite `fg` over `bg` in RGB space.
 ///
 /// `alpha` is clamped to `[0, 1]`. Non-finite alpha returns `bg`.

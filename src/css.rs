@@ -14,9 +14,14 @@ fn write_section<'a>(
         // String::write_fmt is infallible
         let _ = writeln!(
             out,
-            "  --{prefix}-{section}-{slot_css}: #{:02x}{:02x}{:02x};",
-            color.r, color.g, color.b
+            "  --{prefix}-{section}-{slot_css}: {color};",
         );
+    }
+}
+
+impl Palette {
+    pub fn to_css(&self, prefix: &str) -> String {
+        to_css_custom_properties(self, prefix)
     }
 }
 

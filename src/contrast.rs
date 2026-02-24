@@ -1,9 +1,7 @@
-use std::sync::Arc;
-
 use crate::color::Color;
 use crate::palette::Palette;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ContrastLevel {
     AaNormal,
     AaLarge,
@@ -25,10 +23,10 @@ impl ContrastLevel {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ContrastViolation {
-    pub foreground_label: Arc<str>,
-    pub background_label: Arc<str>,
+    pub foreground_label: Box<str>,
+    pub background_label: Box<str>,
     pub foreground: Color,
     pub background: Color,
     pub ratio: f64,
@@ -50,9 +48,21 @@ pub fn meets_level(fg: &Color, bg: &Color, level: ContrastLevel) -> bool {
     level.passes(contrast_ratio(fg, bg))
 }
 
+impl Color {
+    pub fn contrast_ratio(&self, other: &Color) -> f64 {
+        contrast_ratio(self, other)
+    }
+
+    pub fn meets_level(&self, other: &Color, level: ContrastLevel) -> bool {
+        meets_level(self, other, level)
+    }
+}
+
 fn check_pair(
-    fg_label: &str,
-    bg_label: &str,
+    fg_prefix: &str,
+    fg_name: &str,
+    bg_prefix: &str,
+    bg_name: &str,
     fg: Option<&Color>,
     bg: Option<&Color>,
     level: ContrastLevel,
@@ -65,8 +75,8 @@ fn check_pair(
     match level.passes(ratio) {
         true => None,
         false => Some(ContrastViolation {
-            foreground_label: Arc::from(fg_label),
-            background_label: Arc::from(bg_label),
+            foreground_label: format!("{fg_prefix}.{fg_name}").into_boxed_str(),
+            background_label: format!("{bg_prefix}.{bg_name}").into_boxed_str(),
             foreground: fg_color,
             background: bg_color,
             ratio,
@@ -84,36 +94,34 @@ pub fn validate_palette(palette: &Palette, level: ContrastLevel) -> Vec<Contrast
     };
 
     // Core readability
-    push(check_pair("base.foreground", "base.background", palette.base.foreground.as_ref(), palette.base.background.as_ref(), level));
-    push(check_pair("base.foreground_dark", "base.background", palette.base.foreground_dark.as_ref(), palette.base.background.as_ref(), level));
-    push(check_pair("base.foreground", "base.background_dark", palette.base.foreground.as_ref(), palette.base.background_dark.as_ref(), level));
-    push(check_pair("base.foreground", "base.background_highlight", palette.base.foreground.as_ref(), palette.base.background_highlight.as_ref(), level));
+    push(check_pair("base", "foreground", "base", "background", palette.base.foreground.as_ref(), palette.base.background.as_ref(), level));
+    push(check_pair("base", "foreground_dark", "base", "background", palette.base.foreground_dark.as_ref(), palette.base.background.as_ref(), level));
+    push(check_pair("base", "foreground", "base", "background_dark", palette.base.foreground.as_ref(), palette.base.background_dark.as_ref(), level));
+    push(check_pair("base", "foreground", "base", "background_highlight", palette.base.foreground.as_ref(), palette.base.background_highlight.as_ref(), level));
 
     // Semantic over background
     for (name, color) in palette.semantic.populated_slots() {
-        let label = format!("semantic.{name}");
-        push(check_pair(&label, "base.background", Some(color), palette.base.background.as_ref(), level));
+        push(check_pair("semantic", name, "base", "background", Some(color), palette.base.background.as_ref(), level));
     }
 
     // Editor pairs
-    push(check_pair("editor.selection_fg", "editor.selection_bg", palette.editor.selection_fg.as_ref(), palette.editor.selection_bg.as_ref(), level));
-    push(check_pair("editor.inlay_hint_fg", "editor.inlay_hint_bg", palette.editor.inlay_hint_fg.as_ref(), palette.editor.inlay_hint_bg.as_ref(), level));
-    push(check_pair("editor.search_fg", "editor.search_bg", palette.editor.search_fg.as_ref(), palette.editor.search_bg.as_ref(), level));
-    push(check_pair("editor.cursor_text", "editor.cursor", palette.editor.cursor_text.as_ref(), palette.editor.cursor.as_ref(), level));
+    push(check_pair("editor", "selection_fg", "editor", "selection_bg", palette.editor.selection_fg.as_ref(), palette.editor.selection_bg.as_ref(), level));
+    push(check_pair("editor", "inlay_hint_fg", "editor", "inlay_hint_bg", palette.editor.inlay_hint_fg.as_ref(), palette.editor.inlay_hint_bg.as_ref(), level));
+    push(check_pair("editor", "search_fg", "editor", "search_bg", palette.editor.search_fg.as_ref(), palette.editor.search_bg.as_ref(), level));
+    push(check_pair("editor", "cursor_text", "editor", "cursor", palette.editor.cursor_text.as_ref(), palette.editor.cursor.as_ref(), level));
 
     // Diff pairs
-    push(check_pair("diff.added_fg", "diff.added_bg", palette.diff.added_fg.as_ref(), palette.diff.added_bg.as_ref(), level));
-    push(check_pair("diff.modified_fg", "diff.modified_bg", palette.diff.modified_fg.as_ref(), palette.diff.modified_bg.as_ref(), level));
-    push(check_pair("diff.removed_fg", "diff.removed_bg", palette.diff.removed_fg.as_ref(), palette.diff.removed_bg.as_ref(), level));
+    push(check_pair("diff", "added_fg", "diff", "added_bg", palette.diff.added_fg.as_ref(), palette.diff.added_bg.as_ref(), level));
+    push(check_pair("diff", "modified_fg", "diff", "modified_bg", palette.diff.modified_fg.as_ref(), palette.diff.modified_bg.as_ref(), level));
+    push(check_pair("diff", "removed_fg", "diff", "removed_bg", palette.diff.removed_fg.as_ref(), palette.diff.removed_bg.as_ref(), level));
 
     // Typography over background
-    push(check_pair("typography.comment", "base.background", palette.typography.comment.as_ref(), palette.base.background.as_ref(), level));
-    push(check_pair("typography.line_number", "base.background", palette.typography.line_number.as_ref(), palette.base.background.as_ref(), level));
+    push(check_pair("typography", "comment", "base", "background", palette.typography.comment.as_ref(), palette.base.background.as_ref(), level));
+    push(check_pair("typography", "line_number", "base", "background", palette.typography.line_number.as_ref(), palette.base.background.as_ref(), level));
 
     // Syntax over background
     for (name, color) in palette.syntax.populated_slots() {
-        let label = format!("syntax.{name}");
-        push(check_pair(&label, "base.background", Some(color), palette.base.background.as_ref(), level));
+        push(check_pair("syntax", name, "base", "background", Some(color), palette.base.background.as_ref(), level));
     }
 
     violations

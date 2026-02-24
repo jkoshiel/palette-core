@@ -11,6 +11,12 @@ pub mod contrast;
 pub mod css;
 pub mod manipulation;
 
+pub use color::Color;
+pub use contrast::ContrastLevel;
+pub use error::PaletteError;
+pub use palette::{Palette, PaletteMeta};
+pub use registry::{load_preset, load_preset_file, preset_ids, Registry, ThemeInfo};
+
 #[cfg(feature = "terminal")]
 pub mod terminal;
 
@@ -22,3 +28,6 @@ pub mod snapshot;
 
 #[cfg(feature = "egui")]
 pub mod egui;
+
+#[cfg(feature = "wasm")]
+pub mod wasm;

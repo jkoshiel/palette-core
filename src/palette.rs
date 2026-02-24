@@ -24,7 +24,7 @@ fn resolve_color(
 macro_rules! color_group {
     ($(#[$meta:meta])* $name:ident { $($field:ident),+ $(,)? }) => {
         $(#[$meta])*
-        #[derive(Debug, Clone, PartialEq, Eq)]
+        #[derive(Debug, Clone, Default, PartialEq, Eq)]
         #[cfg_attr(feature = "snapshot", derive(serde::Serialize))]
         pub struct $name {
             $(pub $field: Option<Color>,)+
@@ -51,129 +51,142 @@ macro_rules! color_group {
     };
 }
 
-color_group!(BaseColors {
-    background,
-    background_dark,
-    background_highlight,
-    foreground,
-    foreground_dark,
-    border,
-    border_highlight,
-});
+/// Single source of truth for color group field lists.
+///
+/// Invokes `$macro_name!` once per group, passing the struct name and its
+/// fields. Both `color_group!` and `terminal_group!` consume this so
+/// additions stay in sync at compile time.
+macro_rules! color_fields {
+    ($macro_name:ident) => {
+        $macro_name!(BaseColors {
+            background,
+            background_dark,
+            background_highlight,
+            foreground,
+            foreground_dark,
+            border,
+            border_highlight,
+        });
 
-color_group!(SemanticColors {
-    success,
-    warning,
-    error,
-    info,
-    hint,
-});
+        $macro_name!(SemanticColors {
+            success,
+            warning,
+            error,
+            info,
+            hint,
+        });
 
-color_group!(DiffColors {
-    added,
-    added_bg,
-    added_fg,
-    modified,
-    modified_bg,
-    modified_fg,
-    removed,
-    removed_bg,
-    removed_fg,
-    text_bg,
-    ignored,
-});
+        $macro_name!(DiffColors {
+            added,
+            added_bg,
+            added_fg,
+            modified,
+            modified_bg,
+            modified_fg,
+            removed,
+            removed_bg,
+            removed_fg,
+            text_bg,
+            ignored,
+        });
 
-color_group!(SurfaceColors {
-    menu,
-    sidebar,
-    statusline,
-    float,
-    popup,
-    overlay,
-    highlight,
-    selection,
-    focus,
-    search,
-});
+        $macro_name!(SurfaceColors {
+            menu,
+            sidebar,
+            statusline,
+            float,
+            popup,
+            overlay,
+            highlight,
+            selection,
+            focus,
+            search,
+        });
 
-color_group!(TypographyColors {
-    comment,
-    gutter,
-    line_number,
-    selection_text,
-    link,
-    title,
-});
+        $macro_name!(TypographyColors {
+            comment,
+            gutter,
+            line_number,
+            selection_text,
+            link,
+            title,
+        });
 
-color_group!(SyntaxColors {
-    keywords,
-    keywords_fn,
-    functions,
-    variables,
-    variables_builtin,
-    parameters,
-    properties,
-    types,
-    types_builtin,
-    constants,
-    numbers,
-    booleans,
-    strings,
-    strings_doc,
-    strings_escape,
-    strings_regex,
-    operators,
-    punctuation,
-    punctuation_bracket,
-    annotations,
-    attributes,
-    constructor,
-    tag,
-    tag_delimiter,
-    tag_attribute,
-    comments,
-});
+        $macro_name!(SyntaxColors {
+            keywords,
+            keywords_fn,
+            functions,
+            variables,
+            variables_builtin,
+            parameters,
+            properties,
+            types,
+            types_builtin,
+            constants,
+            numbers,
+            booleans,
+            strings,
+            strings_doc,
+            strings_escape,
+            strings_regex,
+            operators,
+            punctuation,
+            punctuation_bracket,
+            annotations,
+            attributes,
+            constructor,
+            tag,
+            tag_delimiter,
+            tag_attribute,
+            comments,
+        });
 
-color_group!(EditorColors {
-    cursor,
-    cursor_text,
-    match_paren,
-    selection_bg,
-    selection_fg,
-    inlay_hint_bg,
-    inlay_hint_fg,
-    search_bg,
-    search_fg,
-    diagnostic_error,
-    diagnostic_warn,
-    diagnostic_info,
-    diagnostic_hint,
-    diagnostic_underline_error,
-    diagnostic_underline_warn,
-    diagnostic_underline_info,
-    diagnostic_underline_hint,
-});
+        $macro_name!(EditorColors {
+            cursor,
+            cursor_text,
+            match_paren,
+            selection_bg,
+            selection_fg,
+            inlay_hint_bg,
+            inlay_hint_fg,
+            search_bg,
+            search_fg,
+            diagnostic_error,
+            diagnostic_warn,
+            diagnostic_info,
+            diagnostic_hint,
+            diagnostic_underline_error,
+            diagnostic_underline_warn,
+            diagnostic_underline_info,
+            diagnostic_underline_hint,
+        });
 
-color_group!(TerminalAnsiColors {
-    black,
-    red,
-    green,
-    yellow,
-    blue,
-    magenta,
-    cyan,
-    white,
-    bright_black,
-    bright_red,
-    bright_green,
-    bright_yellow,
-    bright_blue,
-    bright_magenta,
-    bright_cyan,
-    bright_white,
-});
+        $macro_name!(TerminalAnsiColors {
+            black,
+            red,
+            green,
+            yellow,
+            blue,
+            magenta,
+            cyan,
+            white,
+            bright_black,
+            bright_red,
+            bright_green,
+            bright_yellow,
+            bright_blue,
+            bright_magenta,
+            bright_cyan,
+            bright_white,
+        });
+    };
+}
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+color_fields!(color_group);
+#[cfg(feature = "terminal")]
+pub(crate) use color_fields;
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "snapshot", derive(serde::Serialize))]
 pub struct PaletteMeta {
     pub name: Arc<str>,
