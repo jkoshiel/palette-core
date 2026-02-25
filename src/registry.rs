@@ -138,6 +138,15 @@ pub fn load_preset(id: &str) -> Result<Palette, PaletteError> {
     })
 }
 
+/// Load a built-in preset by ID, returning `None` if the ID is not recognized.
+///
+/// Built-in presets are compiled into the binary and test-verified, so parsing
+/// cannot fail. This provides an infallible alternative to [`load_preset`] for
+/// the common case of loading a known built-in theme.
+pub fn preset(id: &str) -> Option<Palette> {
+    load_preset(id).ok()
+}
+
 // ---------------------------------------------------------------------------
 // Registry
 // ---------------------------------------------------------------------------

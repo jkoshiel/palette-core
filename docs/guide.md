@@ -1,6 +1,38 @@
 # Guide
 
-This guide covers theme switching, custom presets, and end-user theming. For quick-start examples (single preset, all targets), see the [README](../README.md). For CSS variable names, see the [CSS variables reference](css-variables.md).
+This guide covers loading presets, theme switching, custom presets, and end-user theming. For quick-start examples (single preset, all targets), see the [README](../README.md). For CSS variable names, see the [CSS variables reference](css-variables.md).
+
+## Loading built-in presets
+
+Built-in presets are compiled into the binary. Use `preset()` to load them — it returns `Option<Palette>`, with `None` only if the ID doesn't match a builtin.
+
+```rust
+use palette_core::preset;
+
+let palette = preset("tokyonight").expect("builtin preset");
+```
+
+This is the right choice when you're loading a known builtin ID. No error handling beyond the `Option`.
+
+### `preset()` vs `load_preset()`
+
+| | `preset(id)` | `load_preset(id)` |
+|---|---|---|
+| Returns | `Option<Palette>` | `Result<Palette, PaletteError>` |
+| Unknown ID | `None` | `Err(UnknownPreset)` |
+| Use when | Loading a known builtin by name | You need the error type (e.g. to propagate with `?`) |
+
+Both resolve inheritance for variant presets (e.g. `tokyonight_storm` inherits from `tokyonight`).
+
+For user-provided TOML files, use `load_preset_file()` or a `Registry` — those paths can genuinely fail (missing file, bad TOML, broken inheritance chain).
+
+### WASM
+
+```js
+import { preset } from "palette-core";
+
+const palette = preset("tokyonight");  // returns palette or undefined
+```
 
 ## Theme switching with Registry
 

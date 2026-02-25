@@ -13,9 +13,9 @@ Pick a built-in theme and render it for your target.
 **CSS**
 
 ```rust
-use palette_core::load_preset;
+use palette_core::preset;
 
-let palette = load_preset("tokyonight")?;
+let palette = preset("tokyonight").expect("builtin preset");
 let css = format!(":root {{\n{}}}", palette.to_css(None));
 ```
 
@@ -35,10 +35,10 @@ Prefix is optional — pass `Some("app")` to namespace variables as `--app-bg`, 
 **Terminal (ratatui)**
 
 ```rust
-use palette_core::load_preset;
+use palette_core::preset;
 use palette_core::terminal::to_terminal_theme;
 
-let palette = load_preset("catppuccin")?;
+let palette = preset("catppuccin").expect("builtin preset");
 let theme = to_terminal_theme(&palette);
 // theme.base.background, theme.syntax.keywords, etc.
 ```
@@ -46,30 +46,30 @@ let theme = to_terminal_theme(&palette);
 **egui**
 
 ```rust
-use palette_core::load_preset;
+use palette_core::preset;
 use palette_core::egui::to_egui_visuals;
 
-let palette = load_preset("github_dark")?;
+let palette = preset("github_dark").expect("builtin preset");
 ctx.set_visuals(to_egui_visuals(&palette));
 ```
 
 **JSON**
 
 ```rust
-use palette_core::load_preset;
+use palette_core::preset;
 
-let palette = load_preset("nord")?;
+let palette = preset("nord").expect("builtin preset");
 let json = palette.to_json()?;
 ```
 
 **WASM**
 
 ```js
-import { loadPreset, loadPresetCss } from "palette-core";
+import { preset, loadPresetCss } from "palette-core";
 
-const palette = loadPreset("tokyonight");
-console.log(palette.name());       // "TokyoNight (Night)"
-console.log(palette.toCss());      // CSS custom properties (no prefix)
+const palette = preset("tokyonight");   // returns palette or undefined
+console.log(palette.name());            // "TokyoNight (Night)"
+console.log(palette.toCss());           // CSS custom properties (no prefix)
 
 const css = loadPresetCss("dracula");           // no prefix
 const prefixed = loadPresetCss("dracula", "app"); // --app-bg, --app-fg, etc.

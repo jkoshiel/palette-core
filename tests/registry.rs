@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use palette_core::color::Color;
 use palette_core::error::PaletteError;
-use palette_core::registry::{load_preset, load_preset_file, preset_ids};
+use palette_core::registry::{load_preset, load_preset_file, preset, preset_ids};
 use palette_core::{Registry, ThemeInfo};
 
 #[test]
@@ -37,6 +37,35 @@ fn variant_inherits_parent_colors() {
 fn unknown_preset_returns_error() {
     let result = load_preset("nonexistent");
     assert!(matches!(result, Err(PaletteError::UnknownPreset(_))));
+}
+
+#[test]
+fn preset_returns_palette_for_builtin() {
+    let palette = preset("tokyonight").expect("builtin should exist");
+    assert_eq!(
+        palette.base.background,
+        Some(Color::from_hex("#1a1b2a").unwrap()),
+    );
+}
+
+#[test]
+fn preset_returns_none_for_unknown_id() {
+    assert!(preset("nonexistent").is_none());
+}
+
+#[test]
+fn preset_resolves_inheritance() {
+    let storm = preset("tokyonight_storm").expect("builtin variant should exist");
+    assert_eq!(
+        storm.base.background,
+        Some(Color::from_hex("#24283b").unwrap()),
+        "variant uses its own background"
+    );
+    assert_eq!(
+        storm.semantic.success,
+        Some(Color::from_hex("#73daca").unwrap()),
+        "variant inherits from parent"
+    );
 }
 
 #[test]

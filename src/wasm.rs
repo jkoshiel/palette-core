@@ -187,6 +187,12 @@ pub fn load_preset(id: &str) -> Result<JsPalette, JsValue> {
         .map_err(to_js_error)
 }
 
+/// Load a built-in preset by ID, returning `undefined` if not found.
+#[wasm_bindgen(js_name = "preset")]
+pub fn preset_js(id: &str) -> Option<JsPalette> {
+    crate::registry::preset(id).map(|p| JsPalette { inner: p })
+}
+
 #[wasm_bindgen(js_name = "loadPresetCss")]
 pub fn load_preset_css(id: &str, prefix: Option<String>) -> Result<String, JsValue> {
     let palette = crate::registry::load_preset(id).map_err(to_js_error)?;
