@@ -210,6 +210,51 @@ pub struct Palette {
     pub platform: crate::platform::PlatformOverrides,
 }
 
+const fn c(r: u8, g: u8, b: u8) -> Option<Color> {
+    Some(Color { r, g, b })
+}
+
+impl Default for Palette {
+    /// Neutral dark palette with enough colors for legible rendering.
+    ///
+    /// Covers base, semantic, and surface slots. Syntax, editor, terminal,
+    /// and diff slots are `None` — downstream renderers should apply their
+    /// own defaults for those.
+    fn default() -> Self {
+        Self {
+            meta: None,
+            base: BaseColors {
+                background: c(0x1a, 0x1a, 0x2e),
+                background_dark: c(0x13, 0x13, 0x22),
+                background_highlight: c(0x24, 0x24, 0x3e),
+                foreground: c(0xd0, 0xd0, 0xd0),
+                foreground_dark: c(0x80, 0x80, 0x90),
+                border: c(0x3a, 0x3a, 0x4e),
+                border_highlight: c(0x50, 0x50, 0x68),
+            },
+            semantic: SemanticColors {
+                success: c(0x50, 0xc8, 0x78),
+                warning: c(0xe0, 0xb0, 0x50),
+                error: c(0xe0, 0x50, 0x50),
+                info: c(0x50, 0x90, 0xe0),
+                hint: c(0x70, 0x70, 0x88),
+            },
+            surface: SurfaceColors {
+                highlight: c(0x2a, 0x2a, 0x44),
+                selection: c(0x30, 0x30, 0x50),
+                ..SurfaceColors::default()
+            },
+            diff: DiffColors::default(),
+            typography: TypographyColors::default(),
+            syntax: SyntaxColors::default(),
+            editor: EditorColors::default(),
+            terminal_ansi: TerminalAnsiColors::default(),
+            #[cfg(feature = "platform")]
+            platform: crate::platform::PlatformOverrides::default(),
+        }
+    }
+}
+
 impl Palette {
     pub fn from_manifest(manifest: &PaletteManifest) -> Result<Self, PaletteError> {
         let meta = manifest.meta.as_ref().map(|m| PaletteMeta {

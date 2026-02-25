@@ -96,3 +96,30 @@ fn no_meta_yields_none() {
     let palette = Palette::from_manifest(&manifest).unwrap();
     assert!(palette.meta.is_none());
 }
+
+#[test]
+fn default_has_legible_base_colors() {
+    let palette = Palette::default();
+    assert!(palette.meta.is_none());
+    assert!(palette.base.background.is_some());
+    assert!(palette.base.foreground.is_some());
+    assert!(palette.base.border.is_some());
+}
+
+#[test]
+fn default_has_semantic_colors() {
+    let palette = Palette::default();
+    assert!(palette.semantic.error.is_some());
+    assert!(palette.semantic.warning.is_some());
+    assert!(palette.semantic.success.is_some());
+    assert!(palette.semantic.info.is_some());
+}
+
+#[test]
+fn default_produces_valid_css() {
+    let palette = Palette::default();
+    let css = palette.to_css();
+    assert!(css.contains("--bg:"));
+    assert!(css.contains("--fg:"));
+    assert!(css.contains("--error:"));
+}
