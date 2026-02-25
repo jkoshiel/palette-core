@@ -62,11 +62,8 @@ let reg = Registry::new();
 let mut css = String::new();
 for info in reg.list() {
     let palette = reg.load(&info.id)?;
-    css.push_str(&format!(
-        "[data-theme=\"{}\"] {{\n{}}}\n",
-        info.id,
-        palette.to_css(None),
-    ));
+    let selector = format!("[data-theme=\"{}\"]", info.id);
+    css.push_str(&palette.to_css_scoped(&selector, None));
 }
 ```
 

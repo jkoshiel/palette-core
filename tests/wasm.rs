@@ -111,16 +111,10 @@ fn load_preset_unknown_delegates_to_registry() {
 }
 
 #[test]
-fn load_preset_css_contains_variable() {
-    let css = load_preset_css("tokyonight", Some("prefix".to_owned())).unwrap();
-    assert!(css.contains("--prefix-bg:"));
-}
-
-#[test]
-fn load_preset_css_no_prefix() {
-    let css = load_preset_css("tokyonight", None).unwrap();
+fn load_preset_css_wraps_in_root() {
+    let css = load_preset_css("tokyonight").unwrap();
+    assert!(css.starts_with(":root {\n"));
     assert!(css.contains("--bg:"));
-    assert!(!css.contains("--prefix-"));
 }
 
 #[test]

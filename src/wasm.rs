@@ -129,9 +129,16 @@ impl JsPalette {
         self.inner.meta.as_ref().map(|m| m.style.to_string())
     }
 
+    /// CSS block with `:root` selector, no prefix.
     #[wasm_bindgen(js_name = "toCss")]
-    pub fn to_css(&self, prefix: Option<String>) -> String {
-        crate::css::to_css_custom_properties(&self.inner, prefix.as_deref())
+    pub fn to_css(&self) -> String {
+        self.inner.to_css()
+    }
+
+    /// CSS block with a custom selector and optional prefix.
+    #[wasm_bindgen(js_name = "toCssScoped")]
+    pub fn to_css_scoped(&self, selector: &str, prefix: Option<String>) -> String {
+        self.inner.to_css_scoped(selector, prefix.as_deref())
     }
 
     #[wasm_bindgen(js_name = "toJson")]
@@ -194,9 +201,9 @@ pub fn preset_js(id: &str) -> Option<JsPalette> {
 }
 
 #[wasm_bindgen(js_name = "loadPresetCss")]
-pub fn load_preset_css(id: &str, prefix: Option<String>) -> Result<String, JsValue> {
+pub fn load_preset_css(id: &str) -> Result<String, JsValue> {
     let palette = crate::registry::load_preset(id).map_err(to_js_error)?;
-    Ok(crate::css::to_css_custom_properties(&palette, prefix.as_deref()))
+    Ok(palette.to_css())
 }
 
 #[wasm_bindgen(js_name = "loadPresetJson")]

@@ -16,7 +16,7 @@ Pick a built-in theme and render it for your target.
 use palette_core::preset;
 
 let palette = preset("tokyonight").expect("builtin preset");
-let css = format!(":root {{\n{}}}", palette.to_css(None));
+let css = palette.to_css();
 ```
 
 ```css
@@ -30,7 +30,7 @@ let css = format!(":root {{\n{}}}", palette.to_css(None));
 }
 ```
 
-Prefix is optional — pass `Some("app")` to namespace variables as `--app-bg`, `--app-fg`, etc. See [CSS variables reference](docs/css-variables.md) for the full list.
+For custom selectors or prefixed variables, use `to_css_scoped`. See [CSS variables reference](docs/css-variables.md) for the full list.
 
 **Terminal (ratatui)**
 
@@ -69,10 +69,9 @@ import { preset, loadPresetCss } from "palette-core";
 
 const palette = preset("tokyonight");   // returns palette or undefined
 console.log(palette.name());            // "TokyoNight (Night)"
-console.log(palette.toCss());           // CSS custom properties (no prefix)
+console.log(palette.toCss());           // :root { --bg: ...; --fg: ...; }
 
-const css = loadPresetCss("dracula");           // no prefix
-const prefixed = loadPresetCss("dracula", "app"); // --app-bg, --app-fg, etc.
+const css = loadPresetCss("dracula");   // :root { ... }
 ```
 
 ### Beyond single presets

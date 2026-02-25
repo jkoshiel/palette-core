@@ -148,8 +148,18 @@ fn write_section<'a>(
 }
 
 impl Palette {
-    pub fn to_css(&self, prefix: Option<&str>) -> String {
-        to_css_custom_properties(self, prefix)
+    /// Complete CSS block with `:root` selector and no prefix.
+    ///
+    /// For custom selectors or prefixed variables, use [`to_css_scoped`](Self::to_css_scoped).
+    /// For bare declarations without a selector, use [`to_css_custom_properties`].
+    pub fn to_css(&self) -> String {
+        self.to_css_scoped(":root", None)
+    }
+
+    /// Complete CSS block with a custom selector and optional prefix.
+    pub fn to_css_scoped(&self, selector: &str, prefix: Option<&str>) -> String {
+        let declarations = to_css_custom_properties(self, prefix);
+        format!("{selector} {{\n{declarations}}}\n")
     }
 }
 

@@ -7,6 +7,38 @@ use palette_core::palette::Palette;
 mod common;
 
 #[test]
+fn to_css_wraps_in_root_selector() {
+    let manifest = common::load_preset("tokyonight");
+    let palette = Palette::from_manifest(&manifest).unwrap();
+    let css = palette.to_css();
+
+    assert!(css.starts_with(":root {\n"), "should start with :root {{, got:\n{css}");
+    assert!(css.ends_with("}\n"), "should end with }}, got:\n{css}");
+    assert!(css.contains("--bg: #"), "should contain variables");
+}
+
+#[test]
+fn to_css_scoped_uses_custom_selector() {
+    let manifest = common::load_preset("tokyonight");
+    let palette = Palette::from_manifest(&manifest).unwrap();
+    let css = palette.to_css_scoped("[data-theme=\"dark\"]", None);
+
+    assert!(
+        css.starts_with("[data-theme=\"dark\"] {\n"),
+        "should use custom selector, got:\n{css}",
+    );
+}
+
+#[test]
+fn to_css_scoped_with_prefix() {
+    let manifest = common::load_preset("tokyonight");
+    let palette = Palette::from_manifest(&manifest).unwrap();
+    let css = palette.to_css_scoped(":root", Some("app"));
+
+    assert!(css.contains("--app-bg: #"), "should have prefixed variables, got:\n{css}");
+}
+
+#[test]
 fn no_prefix_produces_bare_variables() {
     let manifest = common::load_preset("tokyonight");
     let palette = Palette::from_manifest(&manifest).unwrap();
