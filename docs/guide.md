@@ -34,6 +34,29 @@ import { preset } from "palette-core";
 const palette = preset("tokyonight");  // returns palette or undefined
 ```
 
+### Fallback when loading fails
+
+`Palette` implements `Default` — a neutral dark palette with base, semantic, and surface colors. Use it as a safe fallback when theme loading fails:
+
+```rust
+use palette_core::Palette;
+
+let palette = reg.load(&user_choice).unwrap_or_default();
+```
+
+Or combine with `preset()` for a two-tier fallback:
+
+```rust
+use palette_core::preset;
+use palette_core::Palette;
+
+let palette = preset(&user_choice)
+    .or_else(|| preset("tokyonight"))
+    .unwrap_or_default();
+```
+
+The default palette covers `base`, `semantic`, and `surface` slots. Syntax, editor, terminal, and diff slots are `None` — downstream renderers should apply their own defaults for those.
+
 ## Theme switching with Registry
 
 Use a `Registry` to expose all built-in presets. Load a default at startup. Let users pick from the list.
