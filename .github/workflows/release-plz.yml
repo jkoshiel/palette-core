@@ -8,10 +8,16 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
 
 jobs:
-  release-plz:
-    name: Release-plz
+  release-pr:
+    name: Release PR
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -32,6 +38,7 @@ jobs:
 
   release:
     name: Release
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: release')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
